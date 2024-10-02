@@ -1,7 +1,14 @@
 import express from "express";
+import bodyParser from 'body-parser';
 import { AppDataSource } from "./db";
+import ticketRoute from './routes/ticket.router';
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use("/api/ticket", ticketRoute)
 
 app.get("/", (req, res) => {
   res.send("Hello, Express.js Server!");

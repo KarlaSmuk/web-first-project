@@ -17,4 +17,10 @@ export class Ticket {
 
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
+
+    constructor(vatin: string, firstName: string, lastName: string) {
+        this.vatin = vatin;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }
