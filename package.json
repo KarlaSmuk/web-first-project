@@ -4,9 +4,11 @@
   "description": "",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "tsc && nodemon ./dist/server.js",
-    "build": "npx tsc",
-    "typeorm": "npm run build && ts-node ./node_modules/typeorm/cli.js -d src/db.ts",
+    "build": "npm run clean && tsc && npm run copy-files",
+    "clean": "shx rm -rf dist",
+    "copy-files": "shx cp -r src/views/ dist",
+    "start": "node dist/server.js",
+    "typeorm": "npx tsc && ts-node ./node_modules/typeorm/cli.js -d src/db.ts",
     "migration:generate": "npm run typeorm -- migration:generate",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert"
@@ -16,6 +18,7 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
+    "shx": "^0.3.4",
     "typescript": "^5.6.2"
   },
   "dependencies": {
