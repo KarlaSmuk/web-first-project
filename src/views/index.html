@@ -1,0 +1,18 @@
+<html>
+
+<head>
+    <title>My Website</title>
+</head>
+
+<body>
+    <h1>Welcome To My Website!</h1>
+    <script>
+        fetch("/api/ticket/9b0e5b74-d679-48ae-b3fd-61fb163f5df6")
+            .then(response => response.json())
+            .then(ticket => {
+                console.log(ticket)
+            })
+    </script>
+</body>
+
+</html>

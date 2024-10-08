@@ -1,7 +1,8 @@
 import express from "express";
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
+import path from "path";
 import { AppDataSource } from "./db";
-import ticketRoute from './routes/ticket.router';
+import ticketRoute from "./routes/ticket.router";
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/ticket", ticketRoute)
 
 app.get("/", (req, res) => {
-  res.send("Hello, Express.js Server!");
+  res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
 const PORT = process.env.PORT || 3001;
