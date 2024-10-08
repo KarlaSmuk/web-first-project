@@ -11,6 +11,7 @@ export const fetchTicket = async (req: Request, res: Response): Promise<void> =>
 
         if (!ticket) {
             res.status(404).json({ message: 'Ticket not found' });
+            return;
         }
 
         res.status(200).json(ticket);
@@ -24,11 +25,19 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
     try {
         const dto: CreateTicketDto = req.body;
 
+        //check if already exists more than 3 tickets for OIB
+        const numOfTickets = await ticketRepository.countBy({ vatin: dto.vatin });
+        if (numOfTickets == 3) {
+            res.status(400).json({ message: 'Three tickets already generated.' });
+            return;
+        }
+
         const createdTicket = await ticketRepository
             .save(new Ticket(dto.vatin, dto.firstName, dto.lastName))
 
         if (!createdTicket) {
             res.status(404).json({ message: 'Ticket not created' });
+            return;
         }
 
         res.status(201).json(createdTicket);
