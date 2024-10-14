@@ -11,31 +11,32 @@
     </div>
     <div class="ticket-details-container">
         <h1>Podaci o ulaznici:</h1>
-        <div>
+        <div class="info">
             <h3>OIB:</h3>
-            <p class="oib"></p>
+            <p id="oib"></p>
         </div>
-        <div>
+        <div class="info">
             <h3>First name:</h3>
-            <p class="fname"></p>
+            <p id="fname"></p>
         </div>
-        <div>
+        <div class="info">
             <h3>Last name:</h3>
-            <p class="lname"></p>
+            <p id="lname"></p>
         </div>
-        <div>
+        <div class="info">
             <h3>Created at:</h3>
-            <p class="time"></p>
+            <p id="time"></p>
         </div>
     </div>
     <script>
-        fetch("/api/ticket/9b0e5b74-d679-48ae-b3fd-61fb163f5df6")
+        fetch("/api/ticket/58101561-131d-4b5b-ab96-2b11fade5b69")
             .then(response => response.json())
             .then(data => {
-                document.getElementsByClassName('oib').innerText = data.vatin;
-                document.getElementsByClassName('fname').innerText = data.firstName;
-                document.getElementsByClassName('lname').innerText = data.lastName;
-                document.getElementsByClassName('time').innerText = data.createdAt;
+                console.log(data)
+                document.getElementById('oib').innerText = data.vatin;
+                document.getElementById('fname').innerText = data.firstName;
+                document.getElementById('lname').innerText = data.lastName;
+                document.getElementById('time').innerText = new Date(data.createdAt).toLocaleString('hr-HR', { timeZone: 'Europe/Zagreb', hour12: false });
             });
     </script>
 </body>
