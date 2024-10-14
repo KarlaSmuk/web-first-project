@@ -5,14 +5,15 @@ import { AppDataSource } from "./db";
 import ticketRoute from "./routes/ticket.router";
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.set("views", path.join(__dirname, "views"));
 
 app.use("/api/ticket", ticketRoute)
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views/index.html"));
+  res.sendFile(path.join(__dirname, "views/publicPages/totalTicketsPage.html"));
 });
 
 const PORT = process.env.PORT || 3001;

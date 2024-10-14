@@ -20,6 +20,18 @@ export const fetchTicket = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+export const getTotalNumberOfTickets = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const total = await ticketRepository.count()
+
+        res.status(200).json({ total });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+
+
 export const createTicket = async (req: Request, res: Response): Promise<void> => {
 
     try {
