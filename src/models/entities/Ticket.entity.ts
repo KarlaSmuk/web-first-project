@@ -22,5 +22,6 @@ export class Ticket {
         this.vatin = vatin;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.createdAt = new Date(); //TODO FIX DATE TIME
     }
 }

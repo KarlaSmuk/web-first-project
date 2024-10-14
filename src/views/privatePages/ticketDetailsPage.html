@@ -29,14 +29,14 @@
         </div>
     </div>
     <script>
-        fetch("/api/ticket/58101561-131d-4b5b-ab96-2b11fade5b69")
+        fetch("/api/ticket/703faa1d-df13-4a4a-a6f7-4101b26c8f4c")
             .then(response => response.json())
             .then(data => {
                 console.log(data)
                 document.getElementById('oib').innerText = data.vatin;
                 document.getElementById('fname').innerText = data.firstName;
                 document.getElementById('lname').innerText = data.lastName;
-                document.getElementById('time').innerText = new Date(data.createdAt).toLocaleString('hr-HR', { timeZone: 'Europe/Zagreb', hour12: false });
+                document.getElementById('time').innerText = new Date(data.createdAt).toLocaleString();
             });
     </script>
 </body>
