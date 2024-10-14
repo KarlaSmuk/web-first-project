@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>Podaci o ulaznici</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <div class="user-container">
+        <h1>Prijavljeni korisnik:</h1>
+    </div>
+    <div class="ticket-details-container">
+        <h1>Podaci o ulaznici:</h1>
+        <div>
+            <h3>OIB:</h3>
+            <p class="oib"></p>
+        </div>
+        <div>
+            <h3>First name:</h3>
+            <p class="fname"></p>
+        </div>
+        <div>
+            <h3>Last name:</h3>
+            <p class="lname"></p>
+        </div>
+        <div>
+            <h3>Created at:</h3>
+            <p class="time"></p>
+        </div>
+    </div>
+    <script>
+        fetch("/api/ticket/9b0e5b74-d679-48ae-b3fd-61fb163f5df6")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementsByClassName('oib').innerText = data.vatin;
+                document.getElementsByClassName('fname').innerText = data.firstName;
+                document.getElementsByClassName('lname').innerText = data.lastName;
+                document.getElementsByClassName('time').innerText = data.createdAt;
+            });
+    </script>
+</body>
+
+</html>

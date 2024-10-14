@@ -1,8 +1,8 @@
 import express from "express";
-import bodyParser from "body-parser";
 import path from "path";
 import { AppDataSource } from "./db";
 import ticketRoute from "./routes/ticket.router";
+import { getAccessToken } from "./middleware/getAccessToken";
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -14,6 +14,11 @@ app.use("/api/ticket", ticketRoute)
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views/publicPages/totalTicketsPage.html"));
+});
+
+app.get("/ticket-details", (req, res) => {
+  getAccessToken()
+  res.sendFile(path.join(__dirname, "views/privatePages/ticketDetailsPage.html"));
 });
 
 const PORT = process.env.PORT || 3001;
