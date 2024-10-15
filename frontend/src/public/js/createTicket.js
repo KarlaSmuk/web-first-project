@@ -2,6 +2,7 @@ const form = document.getElementById("form");
 
 form.addEventListener("submit", async function (event) {
   event.preventDefault();
+  document.getElementById("submit").disabled = true;
 
   const { access_token, token_type } = await getAccessToken();
 
@@ -20,13 +21,31 @@ form.addEventListener("submit", async function (event) {
     body: JSON.stringify(ticketData),
   })
     .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then(async (data) => {
+      if (data.id) {
+        const qrcode = await createQrCode(data.id);
+        document.getElementById(
+          "qrcode"
+        ).innerHTML = `<img src="${qrcode}" alt="QR Code"/>`;
+      }
     })
     .catch((error) => {
       console.error("Error:", error);
     });
+
+  document.getElementById("submit").disabled = false;
 });
+
+async function createQrCode(id) {
+  try {
+    const response = await fetch("/generateQR/" + id);
+    const data = response.text();
+
+    return data;
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+}
 
 async function getAccessToken() {
   try {

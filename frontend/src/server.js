@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const QRCode = require("qrcode");
 require("dotenv").config();
 const { auth, requiresAuth } = require("express-openid-connect");
 
@@ -38,6 +39,17 @@ app.get("/isAuthenticated", (req, res) => {
 
 app.get("/profile", requiresAuth(), (req, res) => {
   res.send(JSON.stringify(req.oidc.user));
+});
+
+app.get("/generateQR/:id", async (req, res) => {
+  try {
+    const url = "http://localhost:" + process.env.PORT + "/" + req.params.id;
+    const qrCodeImage = await QRCode.toDataURL(url);
+
+    res.send(qrCodeImage);
+  } catch (err) {
+    console.error("Error generating QR code:", err);
+  }
 });
 
 app.get("/getAccessToken", async (req, res) => {
