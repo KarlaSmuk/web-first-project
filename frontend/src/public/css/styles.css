@@ -1,11 +1,24 @@
 body {
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0;
   padding: 0;
+  height: 100vw;
+}
+
+.container {
+  display: grid;
+  gap: 12px;
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    opacity: 80%;
+  }
 }
 
 .total-tickets-container {
@@ -33,5 +46,23 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
+  }
+}
+
+.ticket-form {
+  display: grid;
+  gap: 8px;
+
+  input {
+    border: 1px solid grey;
+    border-radius: 8px;
+    padding: 8px;
+  }
+
+  button {
+    cursor: pointer;
+    padding: 6px;
+    width: 100px;
+    margin-top: 8px;
   }
 }
