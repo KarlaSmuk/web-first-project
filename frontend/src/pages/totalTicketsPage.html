@@ -8,13 +8,17 @@
 
 <body>
     <div class="container">
+        <nav>
+            <button id="btn-login" onclick="login()">Prijava</button>
+            <button id="btn-logout" onclick="logout()" disabled="">Odjava</button>
+        </nav>
         <div class="total-tickets-container">
             <h1>Number of generated tickets:</h1>
             <h3 id="total-tickets"></h3>
         </div>
         <a href="/create-ticket">Generate new ticket</a>
     </div>
-    <script src="/getTotalNumOfTickets.js"></script>
+    <script src="/totalTickets.js"></script>
 </body>
 
 </html>

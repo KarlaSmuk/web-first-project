@@ -1,3 +1,4 @@
+const PROFILE_URL = "/profile";
 const urlParams = new URLSearchParams(window.location.search);
 const ticketId = window.location.pathname.split("/").pop();
 
@@ -15,4 +16,13 @@ async function getTicket() {
     });
 }
 
+async function getUser() {
+  await fetch(PROFILE_URL)
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("user-name").innerText = data.name;
+    });
+}
+
 getTicket();
+getUser();

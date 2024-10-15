@@ -1,11 +1,24 @@
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
+const { auth, requiresAuth } = require("express-openid-connect");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public/css")));
 app.use(express.static(path.join(__dirname, "public/js")));
 app.set("pages", path.join(__dirname, "pages"));
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SECRET,
+  baseURL: "http://localhost:" + process.env.PORT,
+  clientID: process.env.CLIENT_ID_APP,
+  issuerBaseURL: process.env.ISSUER_URL,
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/pages/totalTicketsPage.html"));
@@ -15,8 +28,16 @@ app.get("/create-ticket", (req, res) => {
   res.sendFile(path.join(__dirname, "/pages/createTicketPage.html"));
 });
 
-app.get("/ticket-details/:id", (req, res) => {
+app.get("/ticket-details/:id", requiresAuth(), (req, res) => {
   res.sendFile(path.join(__dirname, "/pages/ticketDetailsPage.html"));
+});
+
+app.get("/isAuthenticated", (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? true : false);
+});
+
+app.get("/profile", requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
 });
 
 app.get("/getAccessToken", async (req, res) => {
