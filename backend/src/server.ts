@@ -2,6 +2,7 @@ import express from "express";
 import { AppDataSource } from "./db";
 import cors from "cors";
 import ticketRoute from "./routes/ticket.router";
+import { errorHandler } from "./middleware/errors";
 
 const app = express();
 app.use(cors())
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/ticket", ticketRoute)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 AppDataSource.initialize()
