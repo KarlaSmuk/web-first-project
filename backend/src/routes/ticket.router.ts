@@ -7,7 +7,7 @@ import { jwtCheck } from "../middleware/jwtCheck";
 const router = express.Router();
 
 router.get("/totalNumber", getTotalNumberOfTickets);
-router.get("/:ticketId", fetchTicket);
+router.get("/:ticketId", jwtCheck, fetchTicket);
 router.post("/", jwtCheck, validateRequest(CreateTicketDto), createTicket);
 
 export default router;

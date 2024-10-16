@@ -15,7 +15,12 @@ const config = {
   secret: process.env.SECRET,
   baseURL: "http://localhost:" + process.env.PORT,
   clientID: process.env.CLIENT_ID_APP,
+  clientSecret: process.env.CLIENT_SECRET_APP,
   issuerBaseURL: process.env.ISSUER_URL,
+  authorizationParams: {
+    response_type: "code",
+    audience: process.env.AUDIENCE,
+  },
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -37,8 +42,12 @@ app.get("/isAuthenticated", (req, res) => {
   res.send(req.oidc.isAuthenticated() ? true : false);
 });
 
-app.get("/profile", requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
+app.get("/profile", (req, res) => {
+  res.send(req.oidc.user);
+});
+
+app.get("/getUserAccessToken", (req, res) => {
+  res.send(req.oidc.accessToken);
 });
 
 app.get("/generateQR/:id", async (req, res) => {
