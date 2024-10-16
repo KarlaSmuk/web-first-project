@@ -70,7 +70,7 @@ async function getAccessToken() {
 }
 
 //REQUESTS TO BACKEND
-app.get("/ticket/totalNumber", requiresAuth(), async (req, res) => {
+app.get("/ticket/totalNumber", async (req, res) => {
   const response = await fetch(
     `${process.env.API_URL}/api/ticket/totalNumber`,
     {
@@ -135,12 +135,7 @@ app.post("/api/ticket", async (req, res) => {
     body: JSON.stringify(ticketData),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    return res.status(response.status).json({ error: errorData.message });
-  }
   const data = await response.json();
-
   res.json(data);
 });
 
