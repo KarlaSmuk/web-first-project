@@ -15,13 +15,13 @@ export class Ticket {
     @Column()
     lastName: string;
 
-    @Column({ default: () => 'CURRENT_TIMESTAMP' })
+    @Column()
     createdAt: Date;
 
     constructor(vatin: string, firstName: string, lastName: string) {
         this.vatin = vatin;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.createdAt = new Date(); //TODO FIX DATE TIME
+        this.createdAt = new Date();
     }
 }
