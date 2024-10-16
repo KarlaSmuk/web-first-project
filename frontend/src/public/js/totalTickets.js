@@ -1,16 +1,13 @@
-const BASE_URL = window.location.origin;
-const CHECK_AUTH_URL = "/isAuthenticated";
-
 async function getTotalNumOfTickets() {
-  await fetch("http://localhost:3000/api/ticket/totalNumber")
-    .then((response) => response.json())
-    .then((data) => {
-      document.getElementById("total-tickets").innerText = data.total;
-    });
+  const response = await fetch("/ticket/totalNumber");
+  const data = await response.json();
+  if (data.total) {
+    document.getElementById("total-tickets").innerText = data.total;
+  }
 }
 
 const checkAuth = async () => {
-  const response = await fetch(CHECK_AUTH_URL);
+  const response = await fetch("/isAuthenticated");
   const isAuthenticated = await response.json();
   if (isAuthenticated) {
     document.getElementById("btn-login").disabled = true;
@@ -20,6 +17,3 @@ const checkAuth = async () => {
     document.getElementById("btn-logout").disabled = true;
   }
 };
-
-getTotalNumOfTickets();
-checkAuth();

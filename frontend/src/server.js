@@ -2,8 +2,11 @@ const express = require("express");
 const path = require("path");
 require("dotenv").config();
 const { auth, requiresAuth } = require("express-openid-connect");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public/css")));
 app.use(express.static(path.join(__dirname, "public/js")));
 app.set("pages", path.join(__dirname, "pages"));
@@ -41,15 +44,11 @@ app.get("/isAuthenticated", (req, res) => {
   res.send(req.oidc.isAuthenticated() ? true : false);
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", requiresAuth(), (req, res) => {
   res.send(req.oidc.user);
 });
 
-app.get("/getUserAccessToken", (req, res) => {
-  res.send(req.oidc.accessToken);
-});
-
-app.get("/getAccessToken", async (req, res) => {
+async function getAccessToken() {
   const data = {
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
@@ -57,26 +56,92 @@ app.get("/getAccessToken", async (req, res) => {
     grant_type: "client_credentials",
   };
 
-  try {
-    const response = await fetch(`${process.env.ISSUER_URL}/oauth/token`, {
-      method: "POST",
+  const response = await fetch(`${process.env.ISSUER_URL}/oauth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+
+  return result;
+}
+
+//REQUESTS TO BACKEND
+app.get("/ticket/totalNumber", requiresAuth(), async (req, res) => {
+  const response = await fetch(
+    `${process.env.API_URL}/api/ticket/totalNumber`,
+    {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
     }
+  );
 
-    const result = await response.json();
-    res.send(result);
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
+  if (!response.ok) {
+    const errorData = await response.json();
+    return res.status(response.status).json({ error: errorData.message });
   }
+
+  const result = await response.json();
+  res.json(result);
+});
+
+app.get("/api/ticket/:id", requiresAuth(), async (req, res) => {
+  const tickedId = req.params.id;
+  const { access_token, token_type } = req.oidc.accessToken;
+
+  const response = await fetch(
+    `${process.env.API_URL}/api/ticket/` + tickedId,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token_type} ${access_token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    return res.status(response.status).json({ error: errorData.message });
+  }
+
+  const result = await response.json();
+  res.json(result);
+});
+
+app.post("/api/ticket", async (req, res) => {
+  const { access_token, token_type } = await getAccessToken();
+  const ticketData = req.body;
+
+  if (!ticketData) {
+    return res.status(400).json({ error: "No ticket data provided" });
+  }
+
+  if (!access_token) {
+    return res.status(400).json({ error: "No access_token provided" });
+  }
+
+  const response = await fetch(`${process.env.API_URL}/api/ticket`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token_type} ${access_token}`,
+    },
+    body: JSON.stringify(ticketData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    return res.status(response.status).json({ error: errorData.message });
+  }
+  const data = await response.json();
+
+  res.json(data);
 });
 
 const PORT = process.env.PORT || 8081;

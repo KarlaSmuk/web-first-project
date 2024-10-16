@@ -5,5 +5,5 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
     if (err instanceof UnauthorizedError) {
         res.status(401).json({ message: 'Unauthorized access' });
     }
-    res.status(500).send({ message: err.message });
+    console.log(err)
 };
