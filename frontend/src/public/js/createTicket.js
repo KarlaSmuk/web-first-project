@@ -22,11 +22,10 @@ form.addEventListener("submit", async function (event) {
   })
     .then((response) => response.json())
     .then(async (data) => {
-      if (data.id) {
-        const qrcode = await createQrCode(data.id);
+      if (data.qrcode) {
         document.getElementById(
           "qrcode"
-        ).innerHTML = `<img src="${qrcode}" alt="QR Code"/>`;
+        ).innerHTML = `<img src="${data.qrcode}" alt="QR Code"/>`;
       }
     })
     .catch((error) => {
@@ -35,17 +34,6 @@ form.addEventListener("submit", async function (event) {
 
   document.getElementById("submit").disabled = false;
 });
-
-async function createQrCode(id) {
-  try {
-    const response = await fetch("/generateQR/" + id);
-    const data = response.text();
-
-    return data;
-  } catch (error) {
-    console.error("Error:", error.message);
-  }
-}
 
 async function getAccessToken() {
   try {

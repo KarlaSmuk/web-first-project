@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from "../db";
 import { Ticket } from "../models/entities/Ticket.entity";
 import { CreateTicketDto } from "../models/requests/createTicket.dto";
+import QRCode from "qrcode";
 
 const ticketRepository = AppDataSource.getRepository(Ticket)
 
@@ -52,7 +53,10 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        res.status(201).json(createdTicket);
+        const url = process.env.CLIENT_URL + "/" + createdTicket.id;
+        const qrCodeImage = await QRCode.toDataURL(url);
+
+        res.status(201).json({ qrcode: qrCodeImage });
     } catch (error: unknown) {
         res.status(500).json({ message: 'Server error', error });
     }
