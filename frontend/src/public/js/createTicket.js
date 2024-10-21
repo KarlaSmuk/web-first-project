@@ -19,12 +19,12 @@ form.addEventListener("submit", async function (event) {
   });
 
   const data = await response.json();
-  console.log(data);
   if (data.message) {
     document.getElementById("error").innerHTML = data.message;
   }
 
   if (data.qrcode) {
+    document.getElementById("error").innerHTML = '';
     document.getElementById(
       "qrcode"
     ).innerHTML = `<img src="${data.qrcode}" alt="QR Code"/>`;
