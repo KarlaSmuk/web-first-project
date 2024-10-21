@@ -13,7 +13,7 @@ app.use("/api/ticket", ticketRoute)
 app.use(errorHandler);
 
 const externalUrl = process.env.RENDER_EXTERNAL_URL;
-const PORT = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3001;
+const PORT = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3000;
 AppDataSource.initialize()
   .then(async () => {
     const hostname = '0.0.0.0';
