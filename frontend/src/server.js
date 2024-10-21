@@ -143,6 +143,7 @@ const externalUrl = process.env.RENDER_EXTERNAL_URL;
 const PORT =
   externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 8080;
 app.listen(PORT, () => {
+  const hostname = "0.0.0.0";
   if (externalUrl) {
     app.listen(PORT, hostname, () => {
       console.log(`Server locally running at http://${hostname}:${PORT}/ and from
