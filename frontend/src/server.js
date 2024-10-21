@@ -139,7 +139,16 @@ app.post("/api/ticket", async (req, res) => {
   res.json(data);
 });
 
-const PORT = process.env.PORT || 8081;
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const PORT =
+  externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 8080;
 app.listen(PORT, () => {
-  console.log(`Application running on port http://localhost:${PORT}`);
+  if (externalUrl) {
+    app.listen(PORT, hostname, () => {
+      console.log(`Server locally running at http://${hostname}:${PORT}/ and from
+        outside on ${externalUrl}`);
+    });
+  } else {
+    console.log(`Application running on port http://localhost:${PORT}`);
+  }
 });
