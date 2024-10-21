@@ -11,12 +11,15 @@ app.use(express.static(path.join(__dirname, "public/css")));
 app.use(express.static(path.join(__dirname, "public/js")));
 app.set("pages", path.join(__dirname, "pages"));
 
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const PORT =
+  externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 10001;
+
 const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET,
-  baseURL:
-    process.env.RENDER_EXTERNAL_URL || "http://localhost:" + process.env.PORT,
+  baseURL: externalUrl || `https://localhost:${PORT}`,
   clientID: process.env.CLIENT_ID_APP,
   clientSecret: process.env.CLIENT_SECRET_APP,
   issuerBaseURL: process.env.ISSUER_URL,
@@ -140,9 +143,6 @@ app.post("/api/ticket", async (req, res) => {
   res.json(data);
 });
 
-const externalUrl = process.env.RENDER_EXTERNAL_URL;
-const PORT =
-  externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 8080;
 app.listen(PORT, () => {
   const hostname = "0.0.0.0";
   if (externalUrl) {
