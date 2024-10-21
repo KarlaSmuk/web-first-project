@@ -53,7 +53,7 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        const url = process.env.CLIENT_URL + "/" + createdTicket.id;
+        const url = process.env.CLIENT_URL + "/ticket-details/" + createdTicket.id;
         const qrCodeImage = await QRCode.toDataURL(url);
 
         res.status(201).json({ qrcode: qrCodeImage });
