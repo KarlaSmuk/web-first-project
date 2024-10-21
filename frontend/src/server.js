@@ -15,7 +15,8 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET,
-  baseURL: "http://localhost:" + process.env.PORT,
+  baseURL:
+    process.env.RENDER_EXTERNAL_URL || "http://localhost:" + process.env.PORT,
   clientID: process.env.CLIENT_ID_APP,
   clientSecret: process.env.CLIENT_SECRET_APP,
   issuerBaseURL: process.env.ISSUER_URL,
