@@ -145,8 +145,8 @@ app.post("/api/ticket", async (req, res) => {
 
 app.listen(PORT, () => {
   if (externalUrl) {
-    app.listen(PORT, hostname, () => {
-      console.log(`Server locally running at http://${hostname}:${PORT}/ and from
+    app.listen(PORT, () => {
+      console.log(`Server locally running at http://localhost:${PORT}/ and from
         outside on ${externalUrl}`);
     });
   } else {
